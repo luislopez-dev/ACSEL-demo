@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - AcselDemo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+</head>
+<body class="d-flex flex-column">
+<header class="portal-navbar py-2 mb-4">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <a class="portal-brand" asp-controller="Home" asp-action="Index">AcselDemo</a>
+        <nav class="d-flex align-items-center gap-1">
+            <a class="portal-nav-link" asp-controller="Home" asp-action="Index">Pólizas</a>
+            <a class="portal-nav-link" asp-controller="Polizas" asp-action="Emitir">Emitir Póliza</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container flex-grow-1 pb-5">
+    @if (TempData["MensajeExito"] is string exito)
+    {
+        <div class="alert alert-success py-2">@exito</div>
+    }
+    @if (TempData["MensajeError"] is string error)
+    {
+        <div class="alert alert-danger py-2">@error</div>
+    }
+
+    <main role="main">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top bg-white py-3 mt-auto text-muted" style="font-size: 0.8rem;">
+    <div class="container">
+        <span>AcselDemo</span>
+    </div>
+</footer>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

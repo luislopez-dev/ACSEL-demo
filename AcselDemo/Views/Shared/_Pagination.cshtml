@@ -1,0 +1,47 @@
+@model PaginationDto
+
+@if (Model.TotalCount > 0)
+{
+    var startItem = ((Model.Page - 1) * Model.PageSize) + 1;
+    var endItem = Math.Min(Model.Page * Model.PageSize, Model.TotalCount);
+
+    <div class="px-4 py-3 border-top bg-light d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="text-muted small">
+            Mostrando <span class="fw-semibold font-mono">@startItem-@endItem</span> de <span class="fw-semibold font-mono">@Model.TotalCount</span> registros
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav aria-label="Paginación">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-controller="@Model.Controller"
+                           asp-action="@Model.Action"
+                           asp-route-page="@(Model.Page - 1)"
+                           asp-route-pageSize="@Model.PageSize">Anterior</a>
+                    </li>
+
+                    @for (var i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.Page ? "active" : "")">
+                            <a class="page-link font-mono"
+                               asp-controller="@Model.Controller"
+                               asp-action="@Model.Action"
+                               asp-route-page="@i"
+                               asp-route-pageSize="@Model.PageSize">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-controller="@Model.Controller"
+                           asp-action="@Model.Action"
+                           asp-route-page="@(Model.Page + 1)"
+                           asp-route-pageSize="@Model.PageSize">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+}

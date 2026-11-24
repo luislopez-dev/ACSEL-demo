@@ -1,0 +1,65 @@
+@model PagedResultDto<PolizaResumenResponseDto>
+@{
+    ViewData["Title"] = "Cartera de Pólizas";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <h1 class="h4 fw-bold mb-0">Cartera de Pólizas</h1>
+    <a asp-controller="Polizas" asp-action="Emitir" class="btn btn-brand">+ Emitir Póliza</a>
+</div>
+
+<div class="panel-card overflow-hidden">
+    <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Pólizas Emitidas</span>
+        <span class="badge bg-light text-dark border font-mono">@Model.TotalCount</span>
+    </div>
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="p-4 text-muted">No hay pólizas registradas.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th class="ps-4">Nº Póliza</th>
+                    <th>Producto</th>
+                    <th>Asegurado</th>
+                    <th>Bien Asegurado</th>
+                    <th>Vigencia</th>
+                    <th>Estado</th>
+                    <th class="text-end">Suma Asegurada</th>
+                    <th class="text-end pe-4">Prima Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model.Items)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <a asp-controller="Polizas" asp-action="Detalle" asp-route-id="@p.IdPoliza" class="fw-semibold text-success text-decoration-none font-mono">
+                                @p.NumeroPoliza
+                            </a>
+                        </td>
+                        <td>@p.NombreProducto</td>
+                        <td>@p.NombreAsegurado</td>
+                        <td>@p.DescripcionBien</td>
+                        <td class="font-mono small">
+                            @p.FechaDesde.ToString("yyyy-MM-dd") - @p.FechaHasta.ToString("yyyy-MM-dd")
+                        </td>
+                        <td>
+                            <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">@p.Estado</span>
+                        </td>
+                        <td class="text-end font-mono">$@p.SumaAsegurada.ToString("N2")</td>
+                        <td class="text-end font-mono fw-semibold pe-4">$@p.PrimaTotal.ToString("N2")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+        <partial name="_Pagination" model='new PaginationDto { Page = Model.Page, PageSize = Model.PageSize, TotalCount = Model.TotalCount, TotalPages = Model.TotalPages, Controller = "Home", Action = "Index" }' />
+    }
+</div>

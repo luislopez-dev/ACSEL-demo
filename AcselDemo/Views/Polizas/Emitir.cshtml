@@ -1,0 +1,85 @@
+@model EmitirPolizaRequestDto
+@{
+    ViewData["Title"] = "Emitir Póliza";
+    var productos = ViewBag.Productos as IReadOnlyList<ProductoResponseDto> ?? [];
+    var terceros = ViewBag.Terceros as IReadOnlyList<TerceroResponseDto> ?? [];
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 fw-bold mb-0">Emitir Póliza</h1>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-sm">Volver</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <form asp-controller="Polizas" asp-action="Emitir" method="post" class="panel-card p-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Producto *</label>
+                    <select asp-for="IdProducto" class="form-select">
+                        @foreach (var prod in productos)
+                        {
+                            <option value="@prod.IdProducto">@prod.Nombre (@prod.TasaAnualPct.ToString("N2")%)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdProducto" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Asegurado *</label>
+                    <select asp-for="IdTercero" class="form-select">
+                        @foreach (var ter in terceros)
+                        {
+                            <option value="@ter.IdTercero">@ter.NombreCompleto</option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdTercero" class="text-danger small"></span>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Bien Asegurado *</label>
+                    <input asp-for="DescripcionBien" class="form-control" placeholder="Ej. Toyota Hilux 2025 Placa P-849201"/>
+                    <span asp-validation-for="DescripcionBien" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha Inicio *</label>
+                    <input asp-for="FechaDesde" type="date" class="form-control font-mono"/>
+                    <span asp-validation-for="FechaDesde" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha Fin *</label>
+                    <input asp-for="FechaHasta" type="date" class="form-control font-mono"/>
+                    <span asp-validation-for="FechaHasta" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Cuotas *</label>
+                    <select asp-for="CantidadCuotas" class="form-select font-mono">
+                        <option value="1">1 cuota</option>
+                        <option value="2">2 cuotas</option>
+                        <option value="4">4 cuotas</option>
+                        <option value="12">12 cuotas</option>
+                    </select>
+                    <span asp-validation-for="CantidadCuotas" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Suma Asegurada *</label>
+                    <input asp-for="SumaAsegurada" type="number" step="0.01" class="form-control font-mono"/>
+                    <span asp-validation-for="SumaAsegurada" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-brand">Emitir Póliza</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
