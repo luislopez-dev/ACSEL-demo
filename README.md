@@ -6,7 +6,8 @@
 
 ## Demo
 
-[screen-capture.webm](https://github.com/user-attachments/assets/80059c54-4464-46a9-ba25-afc382967455)
+[screen-capture.webm](https://github.com/user-attachments/assets/7e09f61d-fd21-47b5-a66a-a35fd60cf017)
+
 
 ## Qué demuestra este proyecto
 
