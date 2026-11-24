@@ -1,0 +1,38 @@
+﻿services:
+  oracle-core:
+    image: gvenzl/oracle-free:23-slim
+    container_name: acsel-oracle-core
+    ports:
+      - "1522:1521"
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?Defina ORACLE_PASSWORD en .env}
+      APP_USER: ${ORACLE_APP_USER:-acsel_demo}
+      APP_USER_PASSWORD: ${ORACLE_APP_PASSWORD:?Defina ORACLE_APP_PASSWORD en .env}
+      NLS_LANG: AMERICAN_AMERICA.AL32UTF8
+    volumes:
+      - oracle_acsel_data:/opt/oracle/oradata
+      - ./database:/opt/acsel-scripts:ro
+      - ./database/docker-init:/container-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  acseldemo:
+    image: acseldemo
+    container_name: acsel-web-portal
+    build:
+      context: .
+      dockerfile: AcselDemo/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__OracleCore: "Data Source=oracle-core:1521/FREEPDB1;User Id=${ORACLE_APP_USER:-acsel_demo};Password=${ORACLE_APP_PASSWORD:?Defina ORACLE_APP_PASSWORD en .env};Pooling=true;"
+    depends_on:
+      oracle-core:
+        condition: service_healthy
+
+volumes:
+  oracle_acsel_data:

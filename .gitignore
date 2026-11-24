@@ -1,0 +1,10 @@
+bin/
+obj/
+/packages/
+.idea/
+*.iml
+*.user
+/AcselDemo/appsettings.json
+/_ReSharper.Caches
+.env
+AcselDemo/appsettings.Local.json
